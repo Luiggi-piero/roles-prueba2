@@ -1,10 +1,12 @@
 package com.example.skilllinkbackend.features.usuario.service;
 
 import com.example.skilllinkbackend.config.exceptions.DuplicateResourceException;
+import com.example.skilllinkbackend.features.auth.service.TokenService;
 import com.example.skilllinkbackend.features.auth.validation.password.IPasswordValidationService;
 import com.example.skilllinkbackend.features.role.model.Role;
 import com.example.skilllinkbackend.features.role.model.RolesEnum;
 import com.example.skilllinkbackend.features.role.repository.IRoleRepository;
+import com.example.skilllinkbackend.features.usuario.dto.RegisteredUserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserRegisterRequestDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.model.User;
@@ -20,13 +22,16 @@ public class UserService implements IUserService {
     private final IUserRepository userRepository;
     private final IPasswordValidationService passwordValidationService;
     private final IRoleRepository roleRepository;
+    private final TokenService tokenService;
 
     public UserService(IUserRepository userRepository,
                        IPasswordValidationService passwordValidationService,
-                       IRoleRepository roleRepository) {
+                       IRoleRepository roleRepository,
+                       TokenService tokenService) {
         this.userRepository = userRepository;
         this.passwordValidationService = passwordValidationService;
         this.roleRepository = roleRepository;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -36,12 +41,14 @@ public class UserService implements IUserService {
 
     @Transactional
     @Override
-    public void createUser(UserRegisterRequestDTO userDto) {
+    public RegisteredUserResponseDTO createUser(UserRegisterRequestDTO userDto) {
         validateUserUniqueness(userDto);
         passwordValidationService.validatePassword(new String(userDto.password()));
         User user = new User(userDto);
         assignDefaultRole(user);
-        userRepository.save(user);
+        User userResponse = userRepository.save(user);
+        String token = tokenService.generateToken(userResponse);
+        return new RegisteredUserResponseDTO(userResponse, token);
     }
 
     private void validateUserUniqueness(UserRegisterRequestDTO userDto) {

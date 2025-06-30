@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-@Table(name = "category")
+@Table(name = "categories")
 @Entity(name = "Category")
 public class Category {
 

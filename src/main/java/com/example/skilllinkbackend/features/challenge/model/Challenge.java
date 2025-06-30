@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "challenge")
+@Table(name = "challenges")
 @Entity(name = "Challenge")
 public class Challenge {
 

@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Table(name = "project")
+@Table(name = "projects")
 @Entity(name = "Project")
 public class Project {
 
@@ -30,7 +30,7 @@ public class Project {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_project",
+            name = "users_projects",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
@@ -38,7 +38,7 @@ public class Project {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "project_category",
+            name = "projects_categories",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )

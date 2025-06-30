@@ -1,6 +1,8 @@
 package com.example.skilllinkbackend.features.usuario.controller;
 
 import com.example.skilllinkbackend.config.responses.ApiResponse;
+import com.example.skilllinkbackend.config.responses.DataResponse;
+import com.example.skilllinkbackend.features.usuario.dto.RegisteredUserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserRegisterRequestDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.service.UserService;
@@ -42,9 +44,14 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody @Valid UserRegisterRequestDTO userDto) {
-        userService.createUser(userDto);
-        ApiResponse response = new ApiResponse("Usuario registrado existosamente", HttpStatus.CREATED.value());
+    public ResponseEntity<DataResponse<RegisteredUserResponseDTO>> createUser(
+            @RequestBody @Valid UserRegisterRequestDTO userDto) {
+        RegisteredUserResponseDTO registeredUserResponseDTO =  userService.createUser(userDto);
+        //ApiResponse response = new ApiResponse("Usuario registrado existosamente", HttpStatus.CREATED.value());
+        DataResponse<RegisteredUserResponseDTO> response = new DataResponse(
+                "Usuario registrado existosamente",
+                HttpStatus.CREATED.value(),
+                registeredUserResponseDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
