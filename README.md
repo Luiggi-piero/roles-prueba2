@@ -82,7 +82,7 @@ API Rest desarrollada en Java con Spring Boot para la gestión de usuarios(login
 
 ## Estructura del proyecto
 
-Arquitectura multicapas
+Arquitectura basada en paquetes funcionales, se organizan  las carpetas de acuerdo con las características o módulos de la aplicación (por ejemplo, auth, category, challenge), es un diseño entre aspectos funcionales y principios de Clean Architecture y este tipo de arquitectura agrupa cada módulo con sus propios componentes como controladores, servicios, repositorios y modelos.
 
       src
       └── main
