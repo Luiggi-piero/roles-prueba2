@@ -125,7 +125,7 @@ Arquitectura basada en paquetes funcionales, se organizan  las carpetas de acuer
 > * Registra un usuario
 > * Modifica la tabla users_roles: agrega un registro para asignar al usuario creado el rol ADMIN
 > * Agrega la configuración de la bd en application.properties
-> * Para aquellos que no tienen la zona horaria GMT-5 modificar el archivo ...TokenService (para indicar la expiraición del token)
+> * Para aquellos que no tienen la zona horaria GMT-5 modificar el archivo ...TokenService (para indicar la expiración del token)
          
 
 </br>
