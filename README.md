@@ -8,10 +8,11 @@ API Rest desarrollada en Java con Spring Boot para la gestión de usuarios(login
 1. [Funcionalidades](#Funcionalidades)
 2. [Requerimientos previos](#requerimientos-previos)
 3. [Configuración](#configuración)
-4. [Tecnologías utilizadas](#tecnologías-utilizadas)
-5. [Estructura del proyecto](#estructura-del-proyecto)
-6. [Modelo entidad-relación](#modelo-entidad-relación)
-7. [Licencia](#licencia)
+4. [Swagger](#swagger)
+5. [Tecnologías utilizadas](#tecnologías-utilizadas)
+6. [Estructura del proyecto](#estructura-del-proyecto)
+7. [Modelo entidad-relación](#modelo-entidad-relación)
+8. [Licencia](#licencia)
 
 
 ## Funcionalidades
@@ -134,6 +135,13 @@ API Rest desarrollada en Java con Spring Boot para la gestión de usuarios(login
   4. Ejecuta el proyecto
 
   5. La aplicación estará disponible en: http://localhost:8080
+
+## Swagger
+Swagger está configurado para generar documentación de la API automáticamente. Puedes acceder a la interfaz de Swagger en la siguiente URL cuando el servidor esté en funcionamiento:
+```
+http://localhost:8080/swagger-ui/index.html
+```
+![image](https://github.com/user-attachments/assets/1583800c-2286-49b7-bbf9-928a588debf4)
 
 
 ## Tecnologías utilizadas
