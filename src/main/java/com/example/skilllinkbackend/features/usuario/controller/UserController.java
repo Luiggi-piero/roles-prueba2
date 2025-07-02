@@ -1,11 +1,17 @@
 package com.example.skilllinkbackend.features.usuario.controller;
 
-import com.example.skilllinkbackend.config.responses.ApiResponse;
+//import com.example.skilllinkbackend.config.responses.ApiResponse;
 import com.example.skilllinkbackend.config.responses.DataResponse;
 import com.example.skilllinkbackend.features.usuario.dto.RegisteredUserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserRegisterRequestDTO;
 import com.example.skilllinkbackend.features.usuario.dto.UserResponseDTO;
 import com.example.skilllinkbackend.features.usuario.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con los usuarios del sistema")
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +35,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(
+            summary = "Obtener lista paginada de usuarios",
+            description = "Solo accesible por usuarios con rol ADMIN",
+            security = @SecurityRequirement(name = "bearer-key"),
+            parameters = {
+                    @Parameter(name = "page", description = "Número de página (0-indexado)", example = "0"),
+                    @Parameter(name = "size", description = "Cantidad de elementos por página", example = "10"),
+                    @Parameter(name = "sort", description = "Campo de ordenamiento, ej: userId,asc", example = "userId,asc")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida correctamente"),
+                    @ApiResponse(responseCode = "403", description = "Acceso denegado (no tiene el rol ADMIN)", content = @Content)
+            }
+    )
+    @SecurityRequirement(name = "bearer-key")
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getUsers(@PageableDefault(size = 10, sort = "userId") Pageable pagination) {
@@ -43,6 +65,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+            summary = "Registrar un nuevo usuario",
+            description = "Registro público de un nuevo usuario en la plataforma",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Usuario registrado exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos o error en validación", content = @Content)
+            }
+    )
     @PostMapping("register")
     public ResponseEntity<DataResponse<RegisteredUserResponseDTO>> createUser(
             @RequestBody @Valid UserRegisterRequestDTO userDto) {

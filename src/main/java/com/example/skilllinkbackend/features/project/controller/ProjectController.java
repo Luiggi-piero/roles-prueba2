@@ -4,6 +4,12 @@ import com.example.skilllinkbackend.features.project.dto.ProjectRegisterDTO;
 import com.example.skilllinkbackend.features.project.dto.ProjectResponseDTO;
 import com.example.skilllinkbackend.features.project.dto.ProjectUpdateDTO;
 import com.example.skilllinkbackend.features.project.service.IProjectService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -19,6 +25,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/projects")
+@SecurityRequirement(name = "bearer-key")
+@Tag(name = "Proyectos", description = "Operaciones CRUD relacionadas con proyectos creados por los usuarios")
 public class ProjectController {
     private final IProjectService projectService;
 
@@ -26,6 +34,14 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
+    @Operation(
+            summary = "Crear un nuevo proyecto",
+            description = "Crea un nuevo proyecto a partir de los datos enviados",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Proyecto creado exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content)
+            }
+    )
     @PostMapping
     @Transactional
     public ResponseEntity<ProjectResponseDTO> createProject(
@@ -36,6 +52,17 @@ public class ProjectController {
         return ResponseEntity.created(url).body(projectResponse);
     }
 
+    @Operation(
+            summary = "Listar todos los proyectos con paginación",
+            parameters = {
+                    @Parameter(name = "page", description = "Número de página (0-indexado)", example = "0"),
+                    @Parameter(name = "size", description = "Cantidad de elementos por página", example = "10"),
+                    @Parameter(name = "sort", description = "Campo de ordenamiento (ej: id,asc)", example = "id,asc")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista de proyectos obtenida exitosamente")
+            }
+    )
     @GetMapping
     public Map<String, Object> getProjects(@PageableDefault(size = 10, sort = "id") Pageable pagination) {
         Page<ProjectResponseDTO> projectPage = projectService.getProjects(pagination);
@@ -50,11 +77,26 @@ public class ProjectController {
         return response;
     }
 
+    @Operation(
+            summary = "Obtener un proyecto por ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Proyecto encontrado"),
+                    @ApiResponse(responseCode = "404", description = "Proyecto no encontrado", content = @Content)
+            }
+    )
     @GetMapping("/{id}")
     public ProjectResponseDTO findById(@PathVariable Long id) {
         return projectService.findById(id);
     }
 
+    @Operation(
+            summary = "Actualizar un proyecto existente",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Proyecto actualizado exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Proyecto no encontrado", content = @Content)
+            }
+    )
     @PutMapping("/{id}")
     @Transactional
     public ProjectResponseDTO updateProject(
@@ -63,6 +105,13 @@ public class ProjectController {
         return projectService.updateProject(id, projectUpdateDTO);
     }
 
+    @Operation(
+            summary = "Eliminar un proyecto por ID",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Proyecto eliminado exitosamente"),
+                    @ApiResponse(responseCode = "404", description = "Proyecto no encontrado", content = @Content)
+            }
+    )
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
