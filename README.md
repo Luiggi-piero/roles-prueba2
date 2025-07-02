@@ -11,6 +11,7 @@ API Rest desarrollada en Java con Spring Boot para la gestión de usuarios(login
 4. [Tecnologías utilizadas](#tecnologías-utilizadas)
 5. [Estructura del proyecto](#estructura-del-proyecto)
 6. [Modelo entidad-relación](#modelo-entidad-relación)
+7. [Licencia](#licencia)
 
 
 ## Funcionalidades
@@ -180,6 +181,10 @@ Arquitectura basada en paquetes funcionales, se organizan  las carpetas de acuer
 ![Image](https://github.com/user-attachments/assets/40b0faa5-45e0-4032-b767-053adccf1fb5)
 
 </br>
+
+## Licencia
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+</br></br>
 
 > [!IMPORTANT]
 > * Con sql crea los roles: ADMIN, USER, MENTEE y MENTOR en la tabla roles
